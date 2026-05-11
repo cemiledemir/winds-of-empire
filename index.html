@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winds of Empire — 100 Years at Sea</title>
+    <style>
+        /* ─── Reset & Base ─────────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.75;
+            color: #1a1a1a;
+            background: #fafafa;
+        }
+
+        a { color: #457B9D; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        strong { color: #0f3460; }
+
+        /* ─── Hero Header ──────────────────────────────────────────────── */
+        .hero {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 40%, #16213e 70%, #0f3460 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px 60px;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 46px);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .hero .subtitle {
+            font-style: italic;
+            font-size: clamp(16px, 2.5vw, 20px);
+            color: #b0b8c8;
+            margin-bottom: 16px;
+        }
+
+        .hero .byline {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8090a8;
+        }
+
+        /* ─── Article Container ────────────────────────────────────────── */
+        .article {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+        }
+
+        .article p {
+            margin-bottom: 18px;
+        }
+
+        .article h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-top: 56px;
+            margin-bottom: 20px;
+            padding-top: 24px;
+            border-top: 3px solid #C8102E;
+        }
+
+        .article h2:first-of-type {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .article h3 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-top: 36px;
+            margin-bottom: 14px;
+        }
+
+        /* ─── Pull Quotes ──────────────────────────────────────────────── */
+        .pull-quote {
+            border-left: 4px solid #C8102E;
+            background: #fff5f5;
+            padding: 16px 24px;
+            margin: 36px 0;
+            font-style: italic;
+            font-size: 19px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* ─── Dataset Info Box ─────────────────────────────────────────── */
+        .dataset-box {
+            background: #f0f4f8;
+            border-radius: 6px;
+            padding: 20px 24px;
+            margin: 32px 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.65;
+            color: #333;
+        }
+
+        .dataset-box strong {
+            color: #1a1a2e;
+        }
+
+        /* ─── Figures ──────────────────────────────────────────────────── */
+        .figure {
+            margin: 40px 0;
+        }
+
+        .figure figure {
+            margin: 0;
+        }
+
+        .figure img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .figure iframe {
+            width: 100%;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .figure figcaption {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.55;
+            color: #666;
+            margin-top: 10px;
+            padding: 0 4px;
+        }
+
+        .figure figcaption strong {
+            color: #444;
+        }
+
+        /* ─── References ───────────────────────────────────────────────── */
+        .references {
+            margin-top: 56px;
+            padding-top: 24px;
+            border-top: 1px solid #ddd;
+        }
+
+        .references h3 {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .references ol {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #555;
+            padding-left: 20px;
+        }
+
+        .references li {
+            margin-bottom: 6px;
+        }
+
+        /* ─── Footer ──────────────────────────────────────────────────── */
+        .footer {
+            background: #1a1a2e;
+            color: #8090a8;
+            text-align: center;
+            padding: 32px 20px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .footer a { color: #b0b8c8; }
+
+        /* ─── Responsive ───────────────────────────────────────────────── */
+        @media (max-width: 600px) {
+            .article { padding: 32px 16px 60px; }
+            .hero { padding: 56px 16px 40px; }
+            body { font-size: 16px; }
+            .figure iframe { height: 400px !important; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<header class="hero">
+    <h1>Winds of Empire — 100 Years at Sea</h1>
+    <p class="subtitle">How four European empires competed for control of the world's oceans, told through 250,000 ship logbook entries</p>
+    <p class="byline">DTU 02806 Social Data Analysis &amp; Visualization — Spring 2026</p>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<main class="article">
+
+    <p>
+        Between 1750 and 1850, four European nations — Britain, the Netherlands, Spain, and France —
+        sent thousands of ships across every ocean on Earth. Their officers kept meticulous daily logbooks
+        recording wind, weather, and position. These records, originally digitised for climate science,
+        inadvertently captured something far more human: the rise and fall of maritime empires.
+    </p>
+
+    <p>
+        This is the story those logbooks tell. Not through the lens of admirals and treaties, but through
+        the quiet accumulation of daily observations — who was at sea, where they sailed, and who they
+        met along the way.
+    </p>
+
+    <div class="pull-quote">
+        "Every logbook entry is a day at sea. When a nation stops writing, it has stopped sailing."
+    </div>
+
+    <div class="dataset-box">
+        <strong>About the data:</strong> The CLIWOC 2.1 dataset (Climatological Database for the World's Oceans)
+        contains 287,000+ daily logbook observations from Dutch, British, Spanish, and French ships between
+        1662 and 1855. After filtering to the richest period (1750–1850) and cleaning, we work with
+        <strong>251,456 records</strong> — each representing one day of one ship's voyage, with coordinates,
+        wind measurements, and occasionally the nationality of other ships encountered at sea.
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <h2>Act 1: Rise &amp; Fall of Empires</h2>
+
+    <p>
+        The simplest question reveals the most dramatic story: <em>how many ships did each nation have
+        at sea, year by year?</em> The stacked area chart below shows logbook entries per year for each
+        empire. Each entry represents one day of one ship's voyage — a direct proxy for naval presence.
+    </p>
+
+    <p>
+        Watch for the shaded war periods. Spain peaks at 5,662 entries in 1778 — the height of its
+        Atlantic silver trade — then collapses after entering the American Revolutionary War in 1779.
+        The Dutch show a near-total blackout from 1797 to 1801 when the VOC (Dutch East India Company)
+        was dissolved. France effectively disappears after the Revolution of 1789. Britain, meanwhile,
+        remains the most stable line across the entire century.
+    </p>
+
+    <div class="figure">
+        <figure>
+            <img src="images/rise_fall_empires.png" alt="Stacked area chart showing logbook entries per year for four empires, 1750–1850">
+            <figcaption>
+                <strong>Figure 1.</strong> Logbook entries per year by nationality, 1750–1850.
+                Shaded bands mark major wars. Spain's dramatic peak and collapse, the Dutch VOC blackout,
+                and France's post-Revolution silence are all visible in the data. Britain's consistency
+                reflects uninterrupted global naval deployment.
+            </figcaption>
+        </figure>
+    </div>
+
+    <p>
+        The interactive version below lets you hover over any year to see exact counts, and toggle
+        individual nations on or off to examine their trajectories in isolation.
+    </p>
+
+    <div class="figure">
+        <figure>
+            <iframe src="visualizations/viz1_rise_fall.html" height="520" loading="lazy" title="Interactive stacked area chart"></iframe>
+            <figcaption>
+                <strong>Figure 2.</strong> <em>Interactive:</em> Hover for exact counts per nation per year.
+                Click legend entries to isolate individual nations. Note how the Dutch comeback in the 1830s–1840s
+                (via the Netherlands Trading Society) eventually surpasses even British record counts.
+            </figcaption>
+        </figure>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <h2>Act 2: Highways of the Sea</h2>
+
+    <p>
+        Numbers tell us <em>how much</em> each empire sailed. But <em>where</em> did they go?
+        The map below plots sampled voyage segments for all four nations, revealing the trunk
+        routes that connected empires to their colonies.
+    </p>
+
+    <p>
+        The patterns are strikingly different. The Dutch sailed a single dominant highway:
+        Texel → West Africa → Cape of Good Hope → Batavia (modern Jakarta). The Spanish ran
+        two corridors: the Caribbean silver convoy to Cádiz, and the Manila galleon route across
+        the Pacific. The French appear thinly across the Caribbean, West Africa, and Île de France
+        (Mauritius). Only Britain shows truly global coverage — from the Arctic to latitude 71°S,
+        across all three major oceans.
+    </p>
+
+    <div class="figure">
+        <figure>
+            <iframe src="visualizations/viz2_routes.html" height="560" loading="lazy" title="Interactive ship route map"></iframe>
+            <figcaption>
+                <strong>Figure 3.</strong> <em>Interactive:</em> Use the layer control (top right) to toggle
+                nations on and off. Zoom into specific regions to see individual route segments. Each line
+                represents a sampled voyage segment; colour indicates nationality.
+                <em>British</em> = red, <em>Dutch</em> = orange, <em>Spanish</em> = gold, <em>French</em> = blue.
+            </figcaption>
+        </figure>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <h3>Where Empires Collided</h3>
+
+    <p>
+        The route map shows where each nation sailed individually. But ships did not travel alone —
+        they met each other. The CLIWOC dataset includes a remarkable column: when an officer spotted
+        another vessel, they sometimes recorded its nationality. These 29,000+ encounter records let us
+        map not just where ships <em>were</em>, but where different empires <em>intersected</em>.
+    </p>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <h2>Act 3: Encounters at Sea</h2>
+
+    <p>
+        The heatmap below shows the geographic density of all recorded ship encounters. The hotspots
+        reveal the chokepoints of maritime empire: the English Channel (where everyone passed),
+        the Caribbean (where trade routes converged), the Cape of Good Hope (the gateway to Asia),
+        and the waters around Java (the Dutch heartland).
+    </p>
+
+    <p>
+        Toggle to "Cross-Nation Encounters" to see only cases where ships from <em>different</em>
+        empires met — these mark the true contact zones where imperial spheres overlapped.
+        The "Top Encounter Hotspots" layer highlights the 30 most active meeting points as circles.
+    </p>
+
+    <div class="figure">
+        <figure>
+            <iframe src="visualizations/viz3_encounters.html" height="560" loading="lazy" title="Geographic encounter heatmap"></iframe>
+            <figcaption>
+                <strong>Figure 4.</strong> <em>Interactive:</em> Toggle between "All Encounters" (full density),
+                "Cross-Nation Encounters" (different empires meeting), and "Top Encounter Hotspots"
+                (30 busiest meeting points). The English Channel dominates — but the Caribbean and Cape
+                of Good Hope reveal where empires truly competed for passage.
+            </figcaption>
+        </figure>
+    </div>
+
+    <div class="pull-quote">
+        "The ocean was never empty. Every day, ships from rival empires passed within sight of each other —
+        close enough to record a nationality, far enough to keep sailing."
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <h2>Why This Matters</h2>
+
+    <p>
+        These logbooks were written by officers recording weather for navigation. They were not
+        trying to document the shape of empire. But in the aggregate — 250,000 entries, 100 years,
+        four nations — they inadvertently captured something history books describe in prose: the
+        rise of British hegemony, the collapse of Spain's Atlantic system, the dissolution of the
+        VOC, and the near-total erasure of France from the seas after 1789.
+    </p>
+
+    <p>
+        Data, even data collected for entirely different purposes, carries the fingerprint of the
+        system that produced it. The CLIWOC dataset was digitised to reconstruct pre-industrial
+        wind patterns. We used it to reconstruct the geography of power. Both readings are valid —
+        and both emerge from the same daily observations of men at sea.
+    </p>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div class="references">
+        <h3>References</h3>
+        <ol>
+            <li>García-Herrera, R. et al. (2005). "CLIWOC: A Climatological Database for the World's Oceans 1750–1854." <em>Climatic Change</em>, 73, 1–12. <a href="https://doi.org/10.1007/s10584-005-6952-6">doi:10.1007/s10584-005-6952-6</a></li>
+            <li>Segel, E. &amp; Heer, J. (2010). "Narrative Visualization: Telling Stories with Data." <em>IEEE Trans. on Visualization and Computer Graphics</em>, 16(6), 1139–1148. <a href="https://doi.org/10.1109/TVCG.2010.179">doi:10.1109/TVCG.2010.179</a></li>
+            <li>Wheeler, D. &amp; García-Herrera, R. (2008). "Ship logbooks in climatological research." <em>Annals of the New York Academy of Sciences</em>, 1146, 1–15.</li>
+            <li>Bruijn, J.R. (1990). "The Dutch East India Company's Shipping, 1602–1795." <em>Research in Maritime History</em>, 3, 63–76.</li>
+            <li>CLIWOC Project (2003). CLIWOC 2.1 Dataset. <a href="https://www.knmi.nl/kennis-en-datacentrum/achtergrond/cliwoc-climatological-database-for-the-world-s-oceans">KNMI Data Centre</a></li>
+        </ol>
+    </div>
+
+    <p style="margin-top: 32px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #888;">
+        For detailed methodology, data cleaning decisions, and analysis code, see the
+        <a href="explainer_notebook.ipynb">Explainer Notebook</a>.
+    </p>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+    <p>02806 Social Data Analysis &amp; Visualization — Technical University of Denmark, Spring 2026</p>
+    <p>Data: <a href="https://www.knmi.nl/kennis-en-datacentrum/achtergrond/cliwoc-climatological-database-for-the-world-s-oceans">CLIWOC 2.1</a> · Built with Plotly, Folium &amp; Matplotlib</p>
+</footer>
+
+</body>
+</html>
