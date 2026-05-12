@@ -296,6 +296,93 @@
         .nation-chip.spanish { background: #F1BF0020; color: #a88500; }
         .nation-chip.french { background: #00239518; color: #002395; }
 
+        /* ─── Fact Box ──────────────────────────────────────────────────── */
+        .fact-box {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 10px;
+            padding: 28px 32px;
+            margin: 40px 0;
+            color: #e8eef5;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.7;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fact-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, #C8102E 0%, #FF6B00 33%, #F1BF00 66%, #002395 100%);
+        }
+
+        .fact-box .fact-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #8090a8;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .fact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+        }
+
+        .fact-item .fact-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        .fact-item .fact-label {
+            font-size: 13px;
+            color: #8da0b8;
+            line-height: 1.4;
+        }
+
+        .fact-item .fact-number.british { color: #ff4d6a; }
+        .fact-item .fact-number.dutch { color: #ff8c3a; }
+        .fact-item .fact-number.spanish { color: #ffd24d; }
+        .fact-item .fact-number.french { color: #5b7fff; }
+
+        /* ─── Inline Aside ─────────────────────────────────────────────── */
+        .aside-note {
+            background: #faf8f4;
+            border: 1px solid #e8e4df;
+            border-left: 3px solid #C8102E;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 32px 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14.5px;
+            line-height: 1.65;
+            color: #444;
+        }
+
+        .aside-note .aside-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #C8102E;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        /* ─── Smooth Scroll & Selection ────────────────────────────────── */
+        html { scroll-behavior: smooth; }
+
+        ::selection {
+            background: #C8102E30;
+            color: #1a1a1a;
+        }
+
         /* ─── References ───────────────────────────────────────────────── */
         .references {
             margin-top: 56px;
@@ -355,6 +442,8 @@
             .figure iframe { height: 400px !important; }
             .hero-compass { width: 250px; height: 250px; }
             .section-icon { width: 28px; height: 28px; }
+            .fact-grid { grid-template-columns: repeat(2, 1fr); }
+            .fact-item .fact-number { font-size: 22px; }
         }
     </style>
 </head>
@@ -460,32 +549,33 @@
 <main class="article">
 
     <p>
-        Between 1750 and 1850, four European nations —
+        Between 1750 and 1850, four European nations,
         <span class="nation-chip british">Britain</span>,
         the <span class="nation-chip dutch">Netherlands</span>,
         <span class="nation-chip spanish">Spain</span>, and
-        <span class="nation-chip french">France</span> —
-        sent thousands of ships across every ocean on Earth. Their officers kept meticulous daily logbooks
-        recording wind, weather, and position. These records, originally digitised for climate science,
-        inadvertently captured something far more human: the rise and fall of maritime empires.
+        <span class="nation-chip french">France</span>,
+        sent thousands of ships across every ocean on Earth. Their officers kept daily logbooks,
+        recording wind direction, weather, and their coordinates. These logbooks were originally
+        digitised by climate scientists hoping to reconstruct pre-industrial weather patterns.
+        But in that process, something else surfaced: a century of geopolitical history, written
+        one observation at a time by the men who lived it.
     </p>
 
     <p>
-        This is the story those logbooks tell. Not through the lens of admirals and treaties, but through
-        the quiet accumulation of daily observations — who was at sea, where they sailed, and who they
-        met along the way.
+        Each record in the dataset represents a single day aboard a single ship. When you count
+        those records by nation and year, the numbers trace the shape of empire itself. You can
+        see which nations were expanding, which were collapsing, and roughly when the balance of
+        power shifted. This page walks through what we found in the data, how it confirms what
+        historians have long argued, and where it challenges assumptions you might bring to the table.
     </p>
-
-    <div class="pull-quote">
-        "Every logbook entry is a day at sea. When a nation stops writing, it has stopped sailing."
-    </div>
 
     <div class="dataset-box">
         <strong>About the data:</strong> The CLIWOC 2.1 dataset (Climatological Database for the World's Oceans)
         contains 287,000+ daily logbook observations from Dutch, British, Spanish, and French ships between
-        1662 and 1855. After filtering to the richest period (1750–1850) and cleaning, we work with
-        <strong>251,456 records</strong> — each representing one day of one ship's voyage, with coordinates,
-        wind measurements, and occasionally the nationality of other ships encountered at sea.
+        1662 and 1855. After filtering to the period with the richest coverage (1750 to 1850) and cleaning
+        for coordinate validity, we work with <strong>251,456 records</strong>. Each record represents one
+        day of one ship's voyage, with position coordinates, wind measurements, and in some cases, the
+        nationality of other ships encountered at sea.
     </div>
 
     <div class="nautical-divider">⚓ ✦ ⚓</div>
@@ -493,7 +583,6 @@
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <h2>
         <svg class="section-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Hourglass / timeline icon -->
             <path d="M10 5 h20 v2 l-7 13 7 13 v2 h-20 v-2 l7-13 -7-13 v-2z" stroke="#C8102E" stroke-width="1.5" fill="#C8102E" fill-opacity="0.1"/>
             <circle cx="20" cy="20" r="2" fill="#C8102E"/>
         </svg>
@@ -501,43 +590,109 @@
     </h2>
 
     <p>
-        The simplest question reveals the most dramatic story: <em>how many ships did each nation have
-        at sea, year by year?</em> The stacked area chart below shows logbook entries per year for each
-        empire. Each entry represents one day of one ship's voyage — a direct proxy for naval presence.
+        The simplest question you can ask of this data is also the most revealing: how many ships
+        did each nation have at sea in a given year? The stacked area chart below plots logbook entries
+        per year for all four empires. Since each entry corresponds to one day on one ship, the count
+        serves as a rough but honest proxy for naval and commercial presence.
     </p>
 
     <p>
-        Watch for the shaded war periods. Spain peaks at 5,662 entries in 1778 — the height of its
-        Atlantic silver trade — then collapses after entering the American Revolutionary War in 1779.
-        The Dutch show a near-total blackout from 1797 to 1801 when the VOC (Dutch East India Company)
-        was dissolved. France effectively disappears after the Revolution of 1789. Britain, meanwhile,
-        remains the most stable line across the entire century.
+        Start with <span class="nation-chip spanish">Spain</span>. The Spanish line climbs through the
+        1760s and 1770s, peaking at 5,662 entries in 1778. That number is not a coincidence. The late
+        1770s were the peak years of the Atlantic silver trade, and Spain's economy ran on the <em>flota</em>
+        system: twice-yearly convoy fleets carrying silver from Vera Cruz and Portobelo back to Cadiz.
+        In 1779, Spain entered the American Revolutionary War on the side of France, and within a year
+        the logbook count dropped from 5,662 to under 800. It never recovered. By 1800, Spain logged
+        just 6 entries in the entire year. The loss of its Atlantic fleet was not gradual. It was sudden
+        and total, and the data captures the exact year it happened.
     </p>
+
+    <p>
+        The <span class="nation-chip dutch">Dutch</span> tell a different story, but equally precise.
+        The Vereenigde Oostindische Compagnie (the VOC, or Dutch East India Company) had dominated trade
+        between Europe and Southeast Asia for nearly two centuries. In the data, Dutch logbook entries
+        hold steady through the 1780s and early 1790s. Then, in 1795, French revolutionary forces occupied
+        the Netherlands. The VOC was formally dissolved in 1799, and the data reflects this with clinical
+        accuracy: entries fall from 1,292 in 1796 to just 3 in 1800. For the next decade, the Dutch are
+        nearly invisible. But the story does not end there. In the 1820s, the Netherlands Trading Society
+        (Nederlandsche Handel-Maatschappij) began rebuilding colonial trade routes to the East Indies, and
+        Dutch logbook counts climbed back rapidly. By the 1840s, Dutch entries actually exceeded British
+        ones, a fact that would surprise anyone who thinks of this century as belonging solely to Britain.
+    </p>
+
+    <p>
+        <span class="nation-chip french">France</span> is where the data corrects a common assumption.
+        You might expect the Louisiana Purchase of 1803 to mark France's retreat from the seas, as Napoleon
+        sold off a vast colonial territory and redirected resources toward continental war. But the data
+        tells us the collapse began fourteen years earlier. In 1788, French logbooks recorded 884 entries.
+        In 1789, the year the Revolution broke out, that number fell to 48. That is a 95% drop in a single
+        year. The Revolution did not just change France's government; it dismantled the institutional
+        structure that organized naval expeditions. Officers were purged, ports disrupted, and the chain
+        of command destroyed. By the time Napoleon sold Louisiana in 1803, French ships had already been
+        absent from the logbook record for over a decade. The sale of Louisiana was a consequence of
+        France's naval collapse, not the cause of it.
+    </p>
+
+    <p>
+        <span class="nation-chip british">Britain</span> stands apart from all three. British logbook
+        entries remain consistently between 12,000 and 16,000 per decade across the entire century.
+        Wars came and went. The American colonies declared independence. Napoleon rose and fell. Through
+        all of it, British ships kept sailing and kept writing. The reason is structural: the British
+        East India Company, chartered in 1600, held a monopoly on Indian Ocean and East Asian trade for
+        most of this period, and the Royal Navy maintained a global patrol mandate that no other power
+        could match. The data does not show British dominance as a dramatic event. It shows it as a
+        baseline, the one constant in a century of upheaval.
+    </p>
+
+    <div class="fact-box">
+        <div class="fact-title">By the Numbers: A Century of Naval Presence</div>
+        <div class="fact-grid">
+            <div class="fact-item">
+                <div class="fact-number spanish">5,662</div>
+                <div class="fact-label">Spanish entries in 1778, the single highest year for any nation before 1820</div>
+            </div>
+            <div class="fact-item">
+                <div class="fact-number french">95%</div>
+                <div class="fact-label">Drop in French entries between 1788 and 1789, one year</div>
+            </div>
+            <div class="fact-item">
+                <div class="fact-number dutch">1,292 → 3</div>
+                <div class="fact-label">Dutch entries, 1796 vs. 1800, the VOC dissolution window</div>
+            </div>
+            <div class="fact-item">
+                <div class="fact-number british">~14,000</div>
+                <div class="fact-label">Average British entries per decade, stable across the full century</div>
+            </div>
+        </div>
+    </div>
 
     <div class="figure">
         <figure>
-            <img src="images/rise_fall_empires.png" alt="Stacked area chart showing logbook entries per year for four empires, 1750–1850">
+            <img src="images/rise_fall_empires.png" alt="Stacked area chart showing logbook entries per year for four empires, 1750 to 1850">
             <figcaption>
-                <strong>Figure 1.</strong> Logbook entries per year by nationality, 1750–1850.
-                Shaded bands mark major wars. Spain's dramatic peak and collapse, the Dutch VOC blackout,
-                and France's post-Revolution silence are all visible in the data. Britain's consistency
-                reflects uninterrupted global naval deployment.
+                <strong>Figure 1.</strong> Logbook entries per year by nationality, 1750 to 1850.
+                Shaded bands mark major wars (Seven Years' War, American Revolution, French Revolutionary
+                and Napoleonic Wars). The Spanish peak in 1778, the Dutch blackout from 1797 to 1801,
+                and the French collapse after 1789 are all legible in the data. The British line holds
+                steady across the entire period, reflecting the structural advantage of the East India
+                Company and the Royal Navy's global reach.
             </figcaption>
         </figure>
     </div>
 
     <p>
-        The interactive version below lets you hover over any year to see exact counts, and toggle
-        individual nations on or off to examine their trajectories in isolation.
+        The interactive version below lets you hover over any year to see exact entry counts.
+        You can also click on nation names in the legend to isolate individual trajectories,
+        which is particularly useful for seeing the Dutch recovery in the 1830s and 1840s.
     </p>
 
     <div class="figure">
         <figure>
             <iframe src="visualizations/viz1_rise_fall.html" height="520" loading="lazy" title="Interactive stacked area chart"></iframe>
             <figcaption>
-                <strong>Figure 2.</strong> <em>Interactive:</em> Hover for exact counts per nation per year.
-                Click legend entries to isolate individual nations. Note how the Dutch comeback in the 1830s–1840s
-                (via the Netherlands Trading Society) eventually surpasses even British record counts.
+                <strong>Figure 2 (interactive).</strong> Hover for exact counts per nation per year.
+                Click legend entries to isolate individual nations. Try toggling off Britain to see
+                how the other three nations compare without the dominant British signal.
             </figcaption>
         </figure>
     </div>
@@ -547,7 +702,6 @@
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <h2>
         <svg class="section-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Globe / map icon -->
             <circle cx="20" cy="20" r="16" stroke="#FF6B00" stroke-width="1.5" fill="#FF6B00" fill-opacity="0.08"/>
             <ellipse cx="20" cy="20" rx="8" ry="16" stroke="#FF6B00" stroke-width="1"/>
             <line x1="4" y1="20" x2="36" y2="20" stroke="#FF6B00" stroke-width="0.8"/>
@@ -558,86 +712,73 @@
     </h2>
 
     <p>
-        Numbers tell us <em>how much</em> each empire sailed. But <em>where</em> did they go?
-        The map below plots sampled voyage segments for all four nations, revealing the trunk
-        routes that connected empires to their colonies.
+        The first act told us <em>how many</em> ships each empire had at sea. The natural follow-up is
+        <em>where</em> they went. The map below plots sampled voyage segments for all four nations,
+        colour-coded by empire. When you look at the routes side by side, what stands out is not just the
+        scale of movement, but how differently each empire organized its maritime trade.
     </p>
 
     <p>
-        The patterns are strikingly different. The Dutch sailed a single dominant highway:
-        Texel → West Africa → Cape of Good Hope → Batavia (modern Jakarta). The Spanish ran
-        two corridors: the Caribbean silver convoy to Cádiz, and the Manila galleon route across
-        the Pacific. The French appear thinly across the Caribbean, West Africa, and Île de France
-        (Mauritius). Only Britain shows truly global coverage — from the Arctic to latitude 71°S,
-        across all three major oceans.
+        The <span class="nation-chip spanish">Spanish</span> routes cluster heavily in the Caribbean Sea
+        and the Gulf of Mexico. This is the geographic footprint of the treasure fleet system. Twice a year,
+        convoys of galleons left Vera Cruz and Portobelo loaded with silver and colonial goods, sailing
+        together across the Atlantic to Cadiz for protection against piracy and rival navies. You can also
+        see a thinner Pacific corridor: the Manila Galleon route, linking Acapulco to the Philippines. What
+        is absent is equally telling. Spain has virtually no presence in the Indian Ocean. Its empire was
+        an Atlantic and Pacific affair, and the data makes that geographic limitation visible.
     </p>
+
+    <p>
+        The <span class="nation-chip dutch">Dutch</span> pattern is perhaps the most distinctive of the four.
+        Nearly all Dutch routes follow a single corridor: departing from Texel in the North Sea, sailing
+        south along the West African coast, rounding the Cape of Good Hope, and continuing east to Batavia
+        (modern-day Jakarta). This is the VOC highway. The Dutch did not pursue global coverage. They built
+        one highly optimized trade route and ran it with industrial efficiency. The narrowness of the Dutch
+        network in the data confirms what historians have written about the VOC's model: it prioritized
+        throughput on a fixed corridor over territorial breadth.
+    </p>
+
+    <p>
+        <span class="nation-chip french">French</span> routes appear thin and scattered by comparison.
+        The heaviest concentration is in the Caribbean, connecting ports in Saint-Domingue (modern Haiti)
+        and Martinique with Atlantic crossing routes. You can also see a West African leg, consistent with
+        French involvement in the Atlantic slave trade, and some routes to Ile de France (Mauritius) in
+        the Indian Ocean. The overall impression is of a nation spread across too many theaters without
+        the fleet size to dominate any of them, which is consistent with France's pattern of losing colonial
+        wars to Britain throughout this period.
+    </p>
+
+    <p>
+        <span class="nation-chip british">Britain</span> is the exception to every pattern. British routes
+        cover all three major oceans, extending from the Arctic down to latitude 71 degrees south. The
+        densest corridor runs eastward through the Indian Ocean, reflecting the East India Company's trade
+        monopoly with India, Ceylon, and China. But there are also routes in the Caribbean, along the
+        West African coast, across the North Atlantic to the American colonies, and deep into the Pacific.
+        No other nation in the dataset comes close to this geographic range, and the data confirms what
+        the entry counts in Act 1 already suggested: Britain's advantage was not just in fleet size, but
+        in the sheer breadth of where its ships operated.
+    </p>
+
+    <div class="aside-note">
+        <div class="aside-label">A note on the triangle trade</div>
+        The route map shows West African coastal legs for several nations, consistent with the transatlantic
+        slave trade. However, the CLIWOC dataset was built for meteorological research, not cargo tracking.
+        Only 39 records in the entire dataset contain references to enslaved people in the cargo notes, all
+        of them Dutch, dating between 1751 and 1789. This almost certainly represents a tiny fraction of
+        actual slave-trade voyages. The routes are visible; the human cost behind them is not captured here.
+    </div>
 
     <div class="figure">
         <figure>
             <iframe src="visualizations/viz2_routes.html" height="560" loading="lazy" title="Interactive ship route map"></iframe>
             <figcaption>
-                <strong>Figure 3.</strong> <em>Interactive:</em> Use the layer control (top right) to toggle
-                nations on and off. Zoom into specific regions to see individual route segments. Each line
-                represents a sampled voyage segment; colour indicates nationality.
-                <em>British</em> = red, <em>Dutch</em> = orange, <em>Spanish</em> = gold, <em>French</em> = blue.
+                <strong>Figure 3 (interactive).</strong> Use the layer control (top right) to toggle
+                nations on and off. Zoom into specific regions to examine individual route segments.
+                Each line is a sampled voyage segment, coloured by nationality.
+                Try viewing Spain alone to see the treasure fleet corridors, or the Netherlands alone
+                to see the VOC highway in isolation.
             </figcaption>
         </figure>
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <h3>Where Empires Collided</h3>
-
-    <p>
-        The route map shows where each nation sailed individually. But ships did not travel alone —
-        they met each other. The CLIWOC dataset includes a remarkable column: when an officer spotted
-        another vessel, they sometimes recorded its nationality. These 29,000+ encounter records let us
-        map not just where ships <em>were</em>, but where different empires <em>intersected</em>.
-    </p>
-
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <h2>
-        <svg class="section-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Two ships meeting icon -->
-            <path d="M5 25 Q15 20 25 25 L23 28 Q15 30 7 28 Z" stroke="#002395" stroke-width="1.3" fill="#002395" fill-opacity="0.1"/>
-            <line x1="15" y1="25" x2="15" y2="15" stroke="#002395" stroke-width="1.2"/>
-            <path d="M15 15 L15 20 Q19 17 22 20" stroke="#002395" stroke-width="0.9" fill="none"/>
-            <path d="M18 28 Q28 23 38 28 L36 31 Q28 33 20 31 Z" stroke="#C8102E" stroke-width="1.3" fill="#C8102E" fill-opacity="0.1"/>
-            <line x1="28" y1="28" x2="28" y2="18" stroke="#C8102E" stroke-width="1.2"/>
-            <path d="M28 18 L28 23 Q32 20 35 23" stroke="#C8102E" stroke-width="0.9" fill="none"/>
-            <!-- Meeting spark -->
-            <circle cx="22" cy="22" r="2" fill="#F1BF00" opacity="0.7"/>
-        </svg>
-        Act 3: Encounters at Sea
-    </h2>
-
-    <p>
-        The heatmap below shows the geographic density of all recorded ship encounters. The hotspots
-        reveal the chokepoints of maritime empire: the English Channel (where everyone passed),
-        the Caribbean (where trade routes converged), the Cape of Good Hope (the gateway to Asia),
-        and the waters around Java (the Dutch heartland).
-    </p>
-
-    <p>
-        Toggle to "Cross-Nation Encounters" to see only cases where ships from <em>different</em>
-        empires met — these mark the true contact zones where imperial spheres overlapped.
-        The "Top Encounter Hotspots" layer highlights the 30 most active meeting points as circles.
-    </p>
-
-    <div class="figure">
-        <figure>
-            <iframe src="visualizations/viz3_encounters.html" height="560" loading="lazy" title="Geographic encounter heatmap"></iframe>
-            <figcaption>
-                <strong>Figure 4.</strong> <em>Interactive:</em> Toggle between "All Encounters" (full density),
-                "Cross-Nation Encounters" (different empires meeting), and "Top Encounter Hotspots"
-                (30 busiest meeting points). The English Channel dominates — but the Caribbean and Cape
-                of Good Hope reveal where empires truly competed for passage.
-            </figcaption>
-        </figure>
-    </div>
-
-    <div class="pull-quote">
-        "The ocean was never empty. Every day, ships from rival empires passed within sight of each other —
-        close enough to record a nationality, far enough to keep sailing."
     </div>
 
     <div class="nautical-divider">⚓ ✦ ⚓</div>
@@ -645,27 +786,155 @@
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <h2>
         <svg class="section-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Quill / reflection icon -->
+            <path d="M5 25 Q15 20 25 25 L23 28 Q15 30 7 28 Z" stroke="#002395" stroke-width="1.3" fill="#002395" fill-opacity="0.1"/>
+            <line x1="15" y1="25" x2="15" y2="15" stroke="#002395" stroke-width="1.2"/>
+            <path d="M15 15 L15 20 Q19 17 22 20" stroke="#002395" stroke-width="0.9" fill="none"/>
+            <path d="M18 28 Q28 23 38 28 L36 31 Q28 33 20 31 Z" stroke="#C8102E" stroke-width="1.3" fill="#C8102E" fill-opacity="0.1"/>
+            <line x1="28" y1="28" x2="28" y2="18" stroke="#C8102E" stroke-width="1.2"/>
+            <path d="M28 18 L28 23 Q32 20 35 23" stroke="#C8102E" stroke-width="0.9" fill="none"/>
+            <circle cx="22" cy="22" r="2" fill="#F1BF00" opacity="0.7"/>
+        </svg>
+        Act 3: Encounter Hotspots
+    </h2>
+
+    <p>
+        The first two acts looked at each empire individually: how many ships they had and where those
+        ships went. But ships did not sail in isolation. Officers frequently recorded sightings of other
+        vessels, sometimes noting the nationality of the ship they passed. The CLIWOC dataset includes
+        over 29,000 of these encounter records, and they open up a different kind of question: not just
+        where empires <em>were</em>, but where they <em>met</em>.
+    </p>
+
+    <p>
+        The most immediate finding is that self-encounters dominate the record. British ships recorded
+        26,584 sightings of other British ships, compared to 354 sightings of Dutch ships, 166 of Spanish
+        ships, and 130 of French ships. The Dutch recorded 1,055 sightings of other Dutch ships. These
+        numbers reflect something practical: nations concentrated their shipping on specific routes, so
+        ships of the same flag were far more likely to encounter each other than ships of a rival power.
+        The British self-encounter count is so high partly because British ships were simply everywhere,
+        making it statistically likely that any vessel you passed was also flying a British flag.
+    </p>
+
+    <p>
+        The cross-national encounters are smaller in number but historically richer. The strongest
+        cross-national link is British-Dutch, at 354 recorded encounters. This makes geographic sense:
+        both nations operated heavily in the North Sea and both maintained Indian Ocean trade routes
+        through the Cape of Good Hope. The British-Spanish count of 166 reflects overlapping Caribbean
+        and Atlantic operations. British-French encounters, at 130, were concentrated in similar waters.
+    </p>
+
+    <p>
+        What makes the encounter data genuinely interesting to explore is the question of correlation
+        with diplomatic status. The encounter hotspots visible on the heatmap, the English Channel,
+        the Caribbean, the Cape of Good Hope, and the waters around Java, are precisely the locations
+        where major naval battles took place during this century. This raises a compelling question: do
+        the encounter counts change during wartime versus peacetime? If they do, it could indicate that
+        wartime patrols increased the likelihood of contact. If they do not, it would suggest that these
+        were structurally inevitable collision points, places where imperial trade routes crossed regardless
+        of whether the empires were at war or at peace. The dataset does not include a war/peace indicator
+        per encounter, so this remains an open question, but the geographic overlap between encounter
+        hotspots and known battle sites is hard to ignore.
+    </p>
+
+    <div class="aside-note">
+        <div class="aside-label">An unexpected signal</div>
+        The encounter data includes 71 recorded sightings of American ships by Dutch vessels. Since the
+        United States only began operating a significant merchant fleet after 1780, these encounters serve
+        as a quiet timestamp: the emergence of a new maritime nation, visible in a European meteorological
+        archive.
+    </div>
+
+    <div class="fact-box">
+        <div class="fact-title">Encounter Counts by Nation Pair</div>
+        <div class="fact-grid">
+            <div class="fact-item">
+                <div class="fact-number british">26,584</div>
+                <div class="fact-label">British ships sighting other British ships</div>
+            </div>
+            <div class="fact-item">
+                <div class="fact-number dutch">1,055</div>
+                <div class="fact-label">Dutch ships sighting other Dutch ships</div>
+            </div>
+            <div class="fact-item">
+                <div class="fact-number">354</div>
+                <div class="fact-label">British-Dutch cross-national encounters, the strongest inter-empire link</div>
+            </div>
+            <div class="fact-item">
+                <div class="fact-number">166</div>
+                <div class="fact-label">British-Spanish encounters, concentrated in the Caribbean and Atlantic</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="figure">
+        <figure>
+            <iframe src="visualizations/viz3_encounters.html" height="560" loading="lazy" title="Geographic encounter heatmap"></iframe>
+            <figcaption>
+                <strong>Figure 4 (interactive).</strong> Toggle between "All Encounters" (full density),
+                "Cross-Nation Encounters" (different empires meeting), and "Top Encounter Hotspots"
+                (the 30 busiest meeting points). The English Channel dominates in raw volume, but
+                switch to cross-nation encounters to see where rival empires actually intersected:
+                the Caribbean and the Cape of Good Hope stand out.
+            </figcaption>
+        </figure>
+    </div>
+
+    <div class="nautical-divider">⚓ ✦ ⚓</div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <h2>
+        <svg class="section-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M30 5 Q20 15 12 30 L14 32 Q22 18 32 8 Z" stroke="#1a1a2e" stroke-width="1" fill="#1a1a2e" fill-opacity="0.15"/>
             <line x1="12" y1="30" x2="8" y2="36" stroke="#1a1a2e" stroke-width="1"/>
             <circle cx="8" cy="36" r="1.5" fill="#C8102E"/>
         </svg>
-        Why This Matters
+        What This Data Can and Cannot Tell You
     </h2>
 
     <p>
-        These logbooks were written by officers recording weather for navigation. They were not
-        trying to document the shape of empire. But in the aggregate — 250,000 entries, 100 years,
-        four nations — they inadvertently captured something history books describe in prose: the
-        rise of British hegemony, the collapse of Spain's Atlantic system, the dissolution of the
-        VOC, and the near-total erasure of France from the seas after 1789.
+        This dataset was never meant to tell a political story. It was assembled by climate scientists
+        to reconstruct wind patterns in the pre-industrial Atlantic and Indian Oceans. The fact that it
+        also encodes geopolitical history is a byproduct of how the data was produced: empires with more
+        ships generated more logbook entries, and the geographic distribution of those entries reflects
+        where each empire directed its commercial and military attention.
     </p>
 
     <p>
-        Data, even data collected for entirely different purposes, carries the fingerprint of the
-        system that produced it. The CLIWOC dataset was digitised to reconstruct pre-industrial
-        wind patterns. We used it to reconstruct the geography of power. Both readings are valid —
-        and both emerge from the same daily observations of men at sea.
+        There is real power in that kind of incidental evidence. The CLIWOC data confirms, with specific
+        years and entry counts, events that traditional historical sources describe in broader strokes:
+        Spain's Atlantic collapse after 1779, the institutional death of the VOC in 1799, the destruction
+        of French naval capacity during the Revolution, and the quiet persistence of British global reach.
+        These are not interpretations layered on top of the data. They are visible in the most basic
+        summary statistics.
+    </p>
+
+    <p>
+        But it is equally important to be clear about what the data cannot support. Coverage is uneven
+        across nations: British and Dutch records are far more numerous than Spanish and French ones,
+        partly because of archival survival and partly because of how the CLIWOC project selected
+        logbooks for digitisation. Encounter records exist for only about 12% of all entries, and we
+        cannot distinguish between a peaceful commercial sighting and a hostile wartime encounter from
+        the data alone. The dataset contains almost no information about cargo, crew, or the human
+        consequences of these voyages. The triangle trade is visible in the route patterns, but the
+        dataset was not designed to document it, and treating absence of evidence as evidence of absence
+        would be a mistake.
+    </p>
+
+    <p>
+        We structured this page as a magazine-style narrative following the framework described by
+        Segel and Heer (2010): a linear, author-driven sequence of three acts, each built around
+        a visualization that answers a specific question. The first act asks <em>how many</em>,
+        the second asks <em>where</em>, and the third asks <em>who met whom</em>. This format works
+        well for presenting a predetermined argument while still allowing you to explore the interactive
+        visualizations at your own pace.
+    </p>
+
+    <p>
+        If the analysis here interests you, the dataset rewards further exploration. Temporal animation
+        of the route data, text analysis of the wind vocabulary used by each nation, network graphs
+        of encounter relationships, and cross-referencing with external datasets on naval battles or
+        trade volumes are all viable next steps. The CLIWOC archive is one of the richest quantitative
+        records of the age of sail, and we have only scratched its surface here.
     </p>
 
     <div class="nautical-divider">⚓ ☸ ⚓</div>
@@ -674,10 +943,8 @@
     <div class="references">
         <h3>References</h3>
         <ol>
-            <li>García-Herrera, R. et al. (2005). "CLIWOC: A Climatological Database for the World's Oceans 1750–1854." <em>Climatic Change</em>, 73, 1–12. <a href="https://doi.org/10.1007/s10584-005-6952-6">doi:10.1007/s10584-005-6952-6</a></li>
-            <li>Segel, E. &amp; Heer, J. (2010). "Narrative Visualization: Telling Stories with Data." <em>IEEE Trans. on Visualization and Computer Graphics</em>, 16(6), 1139–1148. <a href="https://doi.org/10.1109/TVCG.2010.179">doi:10.1109/TVCG.2010.179</a></li>
-            <li>Wheeler, D. &amp; García-Herrera, R. (2008). "Ship logbooks in climatological research." <em>Annals of the New York Academy of Sciences</em>, 1146, 1–15.</li>
-            <li>Bruijn, J.R. (1990). "The Dutch East India Company's Shipping, 1602–1795." <em>Research in Maritime History</em>, 3, 63–76.</li>
+            <li>García-Herrera, R. et al. (2005). "CLIWOC: A Climatological Database for the World's Oceans 1750-1854." <em>Climatic Change</em>, 73, 1-12. <a href="https://doi.org/10.1007/s10584-005-6952-6">doi:10.1007/s10584-005-6952-6</a></li>
+            <li>Segel, E. &amp; Heer, J. (2010). "Narrative Visualization: Telling Stories with Data." <em>IEEE Trans. on Visualization and Computer Graphics</em>, 16(6), 1139-1148. <a href="https://doi.org/10.1109/TVCG.2010.179">doi:10.1109/TVCG.2010.179</a></li>
             <li>CLIWOC Project (2003). CLIWOC 2.1 Dataset. <a href="https://www.knmi.nl/kennis-en-datacentrum/achtergrond/cliwoc-climatological-database-for-the-world-s-oceans">KNMI Data Centre</a></li>
         </ol>
     </div>
