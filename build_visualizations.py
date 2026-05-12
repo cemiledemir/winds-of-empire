@@ -299,7 +299,10 @@ def build_route_map():
     for nation in ["British", "Dutch", "Spanish", "French"]:
         if nation not in nation_groups:
             continue
-        fg = folium.FeatureGroup(name=f"<span style='color:{PALETTE[nation]}'> ■ </span>{nation}")
+        fg = folium.FeatureGroup(
+            name=f"<span style='color:{PALETTE[nation]}'> ■ </span>{nation}",
+            show=False,
+        )
 
         for feature in nation_groups[nation]:
             coords = feature["geometry"]["coordinates"]
@@ -338,47 +341,51 @@ def build_route_map():
 # ─── 5. Geographic Encounter Heatmap ────────────────────────────────────────
 
 def build_encounter_map(enc_df):
-    """Encounter map: per-nation markers matching the routes-map color scheme."""
+    """Encounter map: pick one nation at a time, see its encounters coloured by partner."""
     print("  Building encounter map...")
 
     enc_df = enc_df.copy()
     main_order = ["British", "Dutch", "Spanish", "French"]
     main = set(main_order)
 
+    # Cross-nation encounters between the four key nations only
+    enc_main = enc_df[
+        enc_df["nationality"].isin(main)
+        & enc_df["enc_nationality"].isin(main)
+        & (enc_df["nationality"] != enc_df["enc_nationality"])
+    ].copy()
+
+    # Build the map with no auto-tile so we can add the basemap with control=False
+    # (otherwise it joins the radio group with the nation FGs and gets deselected).
     m = folium.Map(
         location=[20, -20],
         zoom_start=3,
-        tiles="CartoDB dark_matter",
+        tiles=None,
         prefer_canvas=True,
     )
+    folium.TileLayer("CartoDB dark_matter", control=False).add_to(m)
 
-    # Each FG holds encounters where its nation appears as logger OR partner.
-    # Cross-empire encounters (both sides among main 4) are prioritized; the
-    # remainder (same-nation, or partner is Unknown/Other/American/etc.) is
-    # sampled to keep the marker count manageable.
+    # One radio FG per nation; markers in nation X's layer are coloured by the
+    # *other* nation in the pair.
     for nation in main_order:
-        involved = enc_df[
-            (enc_df["nationality"] == nation) | (enc_df["enc_nationality"] == nation)
+        involved = enc_main[
+            (enc_main["nationality"] == nation) | (enc_main["enc_nationality"] == nation)
         ]
         if involved.empty:
             continue
 
-        cross_empire = involved[
-            involved["nationality"].isin(main)
-            & involved["enc_nationality"].isin(main)
-            & (involved["nationality"] != involved["enc_nationality"])
-        ]
-        rest = involved.drop(cross_empire.index)
-        rest_quota = max(0, 3000 - len(cross_empire))
-        if len(rest) > rest_quota:
-            rest = rest.sample(rest_quota, random_state=42)
-        subset = pd.concat([cross_empire, rest])
-
         fg = folium.FeatureGroup(
             name=f"<span style='color:{PALETTE[nation]}'> ■ </span>{nation}",
+            overlay=False,
+            control=True,
+            show=False,
         )
-        for _, row in subset.iterrows():
-            color = PALETTE[row["nationality"]]
+        for _, row in involved.iterrows():
+            partner = (
+                row["enc_nationality"] if row["nationality"] == nation
+                else row["nationality"]
+            )
+            color = PALETTE[partner]
             folium.CircleMarker(
                 location=[row["lat"], row["lon"]],
                 radius=3.5,
@@ -420,16 +427,13 @@ def main():
     # Step 1: Extract encounter data with coordinates
     enc_df = extract_encounter_geo()
 
-    # Step 2: Static figure
-    build_static_rise_fall()
-
-    # Step 3: Interactive Plotly
+    # Step 2: Interactive Plotly area chart
     build_interactive_rise_fall()
 
-    # Step 4: Folium route map
+    # Step 3: Folium route map
     build_route_map()
 
-    # Step 5: Encounter heatmap
+    # Step 4: Encounter map
     build_encounter_map(enc_df)
 
     print("\n" + "=" * 60)

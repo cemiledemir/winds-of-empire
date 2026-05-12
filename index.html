@@ -650,37 +650,22 @@
         baseline, the one constant in a century of upheaval.
     </p>
 
-    <div class="figure">
-        <figure>
-            <img src="images/rise_fall_empires.png" alt="Stacked area chart showing logbook entries per year for four empires, 1750 to 1850">
-            <figcaption>
-                <strong>Figure 1 (static).</strong> Logbook entries per year by nationality, 1750–1850,
-                drawn as a stacked area so that the band heights sum to total annual fleet activity.
-                Shaded grey vertical bands mark major wars. Spain's 1778 peak, the Dutch blackout during
-                the VOC dissolution (1797–1801), and France's collapse after 1789 are visible as
-                discontinuities in their respective bands. The British layer dominates the upper portion
-                of the stack throughout the century, reflecting the structural advantage of the East
-                India Company and the Royal Navy's global reach.
-            </figcaption>
-        </figure>
-    </div>
-
     <p>
-        The interactive version below lets you hover over any year to see exact entry counts.
-        You can also click on nation names in the legend to isolate individual trajectories,
-        which is particularly useful for seeing the Dutch recovery in the 1830s and 1840s.
+        The chart below plots logbook entries per year for all four empires. Hover over any year
+        to see exact counts, and click nation names in the legend to isolate individual trajectories.
+        Hiding Britain is particularly useful for comparing the other three trajectories directly,
+        or for seeing the Dutch recovery in the 1830s and 1840s.
     </p>
 
     <div class="figure">
         <figure>
-            <iframe src="visualizations/viz1_rise_fall.html" height="520" loading="lazy" title="Interactive area chart"></iframe>
+            <iframe src="visualizations/viz1_rise_fall.html?v=2" height="520" loading="lazy" title="Annual logbook entries by nation"></iframe>
             <figcaption>
-                <strong>Figure 2 (interactive).</strong> The same data redrawn as <em>non-stacked,
-                overlapping</em> areas — each nation's curve is drawn from zero with a translucent fill,
-                so smaller series like Spain and France stay visible inside the larger British envelope
-                instead of being compressed at the top of a stack. Hover for exact counts per year;
-                click legend entries to isolate individual nations. Try hiding Britain to compare the
-                other three trajectories directly.
+                <strong>Figure 1.</strong> Each curve is one nation's annual logbook entries, with
+                translucent fills so smaller series stay visible behind Britain's larger envelope.
+                Hover for exact counts; click a nation in the legend to hide it. Hide Britain to read
+                Spain's 1778 silver-fleet peak, the Dutch collapse during the VOC dissolution
+                (1797–1801), and France's plunge after 1789 against each other.
             </figcaption>
         </figure>
     </div>
@@ -758,13 +743,13 @@
 
     <div class="figure">
         <figure>
-            <iframe src="visualizations/viz2_routes.html" height="560" loading="lazy" title="Interactive ship route map"></iframe>
+            <iframe src="visualizations/viz2_routes.html?v=2" height="560" loading="lazy" title="Ship route map"></iframe>
             <figcaption>
-                <strong>Figure 3 (interactive).</strong> Each line is a sampled voyage segment,
-                coloured by the ship's nationality. Use the layer control (top-right) to toggle
-                nations on and off, and zoom in to inspect individual segments. Try viewing Spain
-                alone to isolate the Caribbean treasure-fleet corridors, or the Netherlands alone
-                to see the single VOC highway between Texel and Batavia.
+                <strong>Figure 2.</strong> Each line is a sampled voyage segment, coloured by the
+                ship's nationality. The map starts empty — use the layer control (top-right) to add
+                nations one or several at a time, and zoom in to inspect individual segments. Try
+                viewing Spain alone to isolate the Caribbean treasure-fleet corridors, or the
+                Netherlands alone to see the single VOC highway between Texel and Batavia.
             </figcaption>
         </figure>
     </div>
@@ -834,15 +819,14 @@
 
     <div class="figure">
         <figure>
-            <iframe src="visualizations/viz3_encounters.html" height="560" loading="lazy" title="Geographic encounter map"></iframe>
+            <iframe src="visualizations/viz3_encounters.html?v=2" height="560" loading="lazy" title="Cross-nation encounter map"></iframe>
             <figcaption>
-                <strong>Figure 4 (interactive).</strong> Each dot is a single logged encounter,
-                coloured by the <em>logging</em> ship's nation. The layer control (top-right) filters by <em>involvement</em>: an encounter shows up under
-                a nation whenever that nation appears on either side, so a Dutch-logged sighting of a
-                British ship appears in both the Dutch and the British layers. Hover any dot for the
-                nation pair and year. Where dots cluster densely — the English Channel, the Caribbean,
-                the approaches to the Cape of Good Hope, the waters around Java — those are the
-                corridors where empire routes actually crossed paths.
+                <strong>Figure 3.</strong> Each dot marks a logbook entry where a ship recorded
+                meeting a vessel of a different empire. Use the layer control (top-right) to pick
+                one nation at a time — the map shows only its encounters, with each dot coloured
+                by the <em>other</em> ship's nationality. Open the British layer to see Dutch
+                (orange), Spanish (yellow), and French (blue) sightings cluster in the Channel,
+                the Caribbean, and around the Cape of Good Hope.
             </figcaption>
         </figure>
     </div>
