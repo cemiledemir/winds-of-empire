@@ -71,11 +71,36 @@ def extract_encounter_geo():
     enc["lon"] = enc["Lon"].astype(float)
     enc = enc[["lat", "lon", "year", "nationality", "enc_nationality"]]
 
-    # Clean enc_nationality — keep only recognizable nations, label rest as "Other"
-    main_nations = {"British", "Dutch", "French", "Spanish", "American", "Portuguese", "Danish", "Swedish"}
-    enc["enc_nationality"] = enc["enc_nationality"].apply(
-        lambda x: x if x in main_nations else "Other"
-    )
+    # Clean enc_nationality — raw values are uppercase, often typo'd, and
+    # sometimes compound (e.g. "BRITISH AND DUTCH"). Normalize singles, drop compounds.
+    name_map = {
+        "BRITISH": "British", "ENGLISH": "British",
+        "BRITITSH": "British", "BRISTISH": "British",
+        "DUTCH": "Dutch",
+        "FRENCH": "French",
+        "SPANISH": "Spanish",
+        "AMERICAN": "American",
+        "PORTUGUESE": "Portuguese",
+        "DANISH": "Danish",
+        "SWEDISH": "Swedish",
+    }
+
+    def normalize_enc_nat(x):
+        if not isinstance(x, str):
+            return "Unknown"
+        s = x.strip().upper()
+        # Strip uncertainty markers like (?) so "BRITISH(?)" recovers as British
+        s = s.replace("(?)", "").replace("(", "").replace(")", "").rstrip("?").strip()
+        # Compound entries (multiple ships of different nations) → "Other"
+        if " AND " in s or "," in s or "/" in s:
+            return "Other"
+        # Genuinely unidentified partner
+        if s == "UNKNOWN":
+            return "Unknown"
+        # Recognized nation (incl. recovered misspellings) or obscure single name → "Other"
+        return name_map.get(s, "Other")
+
+    enc["enc_nationality"] = enc["enc_nationality"].apply(normalize_enc_nat)
 
     # Filter out unrealistic coordinates
     enc = enc[(enc["lat"].between(-80, 80)) & (enc["lon"].between(-180, 180))]
@@ -171,30 +196,29 @@ def build_interactive_rise_fall():
 
     df = pd.DataFrame(stats)
     pivot = df.pivot_table(index="year", columns="nation", values="count", fill_value=0)
-    order = ["French", "Spanish", "Dutch", "British"]  # Bottom to top for stacking
+    # Draw largest first so smaller nations' lines render on top of the fills
+    order = ["British", "Dutch", "Spanish", "French"]
     pivot = pivot.reindex(columns=order, fill_value=0)
 
-    fig = go.Figure()
-
-    def hex_to_rgba(hex_color, alpha=0.7):
-        """Convert hex color to rgba string for Plotly."""
+    def hex_to_rgba(hex_color, alpha=0.35):
         h = hex_color.lstrip("#")
         r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
         return f"rgba({r},{g},{b},{alpha})"
+
+    fig = go.Figure()
 
     for nation in order:
         fig.add_trace(go.Scatter(
             x=pivot.index,
             y=pivot[nation],
             name=nation,
-            stackgroup="one",
             mode="lines",
-            line=dict(width=0.5, color=PALETTE[nation]),
-            fillcolor=hex_to_rgba(PALETTE[nation], 0.7),
+            fill="tozeroy",
+            fillcolor=hex_to_rgba(PALETTE[nation], 0.35),
+            line=dict(width=1.6, color=PALETTE[nation]),
             hovertemplate=f"<b>{nation}</b><br>Year: %{{x}}<br>Entries: %{{y:,.0f}}<extra></extra>",
         ))
 
-    # Add war period annotations as shapes
     for start, end, label in EVENTS:
         fig.add_vrect(
             x0=start, x1=end,
@@ -314,14 +338,13 @@ def build_route_map():
 # ─── 5. Geographic Encounter Heatmap ────────────────────────────────────────
 
 def build_encounter_map(enc_df):
-    """Build geographic encounter heatmap showing WHERE ships met."""
-    print("  Building encounter heatmap...")
+    """Encounter map: per-nation markers matching the routes-map color scheme."""
+    print("  Building encounter map...")
 
-    # Separate same-nation vs cross-nation encounters
     enc_df = enc_df.copy()
-    enc_df["cross_nation"] = enc_df["nationality"] != enc_df["enc_nationality"]
+    main_order = ["British", "Dutch", "Spanish", "French"]
+    main = set(main_order)
 
-    # Build a Folium map with two layers: same-nation and cross-nation encounters
     m = folium.Map(
         location=[20, -20],
         zoom_start=3,
@@ -329,51 +352,44 @@ def build_encounter_map(enc_df):
         prefer_canvas=True,
     )
 
-    # All encounters as heatmap
-    all_heat_data = enc_df[["lat", "lon"]].values.tolist()
-    fg_all = folium.FeatureGroup(name="All Encounters (density)")
-    HeatMap(
-        all_heat_data,
-        radius=8,
-        blur=12,
-        max_zoom=6,
-        gradient={0.2: "#440154", 0.4: "#31688e", 0.6: "#35b779", 0.8: "#fde725", 1.0: "#ffffff"},
-    ).add_to(fg_all)
-    fg_all.add_to(m)
+    # Each FG holds encounters where its nation appears as logger OR partner.
+    # Cross-empire encounters (both sides among main 4) are prioritized; the
+    # remainder (same-nation, or partner is Unknown/Other/American/etc.) is
+    # sampled to keep the marker count manageable.
+    for nation in main_order:
+        involved = enc_df[
+            (enc_df["nationality"] == nation) | (enc_df["enc_nationality"] == nation)
+        ]
+        if involved.empty:
+            continue
 
-    # Cross-nation encounters only (more interesting — where empires collided)
-    cross = enc_df[enc_df["cross_nation"]]
-    cross_heat = cross[["lat", "lon"]].values.tolist()
-    fg_cross = folium.FeatureGroup(name="Cross-Nation Encounters", show=False)
-    HeatMap(
-        cross_heat,
-        radius=10,
-        blur=14,
-        max_zoom=6,
-        gradient={0.2: "#E63946", 0.4: "#FF6B00", 0.6: "#F1BF00", 0.8: "#ffffff", 1.0: "#ffffff"},
-    ).add_to(fg_cross)
-    fg_cross.add_to(m)
+        cross_empire = involved[
+            involved["nationality"].isin(main)
+            & involved["enc_nationality"].isin(main)
+            & (involved["nationality"] != involved["enc_nationality"])
+        ]
+        rest = involved.drop(cross_empire.index)
+        rest_quota = max(0, 3000 - len(cross_empire))
+        if len(rest) > rest_quota:
+            rest = rest.sample(rest_quota, random_state=42)
+        subset = pd.concat([cross_empire, rest])
 
-    # Top encounter hotspots as circle markers (aggregated to 2° grid)
-    cross_grid = cross.copy()
-    cross_grid["lat_bin"] = (cross_grid["lat"] / 2).round() * 2
-    cross_grid["lon_bin"] = (cross_grid["lon"] / 2).round() * 2
-    hotspots = cross_grid.groupby(["lat_bin", "lon_bin"]).size().reset_index(name="count")
-    hotspots = hotspots.nlargest(30, "count")
-
-    fg_hotspots = folium.FeatureGroup(name="Top Encounter Hotspots", show=False)
-    for _, row in hotspots.iterrows():
-        folium.CircleMarker(
-            location=[row["lat_bin"], row["lon_bin"]],
-            radius=max(4, min(20, row["count"] / 10)),
-            color="#E63946",
-            fill=True,
-            fill_color="#E63946",
-            fill_opacity=0.6,
-            weight=1,
-            tooltip=f"~{int(row['count'])} cross-nation encounters",
-        ).add_to(fg_hotspots)
-    fg_hotspots.add_to(m)
+        fg = folium.FeatureGroup(
+            name=f"<span style='color:{PALETTE[nation]}'> ■ </span>{nation}",
+        )
+        for _, row in subset.iterrows():
+            color = PALETTE[row["nationality"]]
+            folium.CircleMarker(
+                location=[row["lat"], row["lon"]],
+                radius=3.5,
+                color=color,
+                weight=0,
+                fill=True,
+                fill_color=color,
+                fill_opacity=0.6,
+                tooltip=f"{row['nationality']} × {row['enc_nationality']} ({int(row['year'])})",
+            ).add_to(fg)
+        fg.add_to(m)
 
     folium.LayerControl(collapsed=False).add_to(m)
 

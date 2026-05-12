@@ -670,12 +670,13 @@
         <figure>
             <img src="images/rise_fall_empires.png" alt="Stacked area chart showing logbook entries per year for four empires, 1750 to 1850">
             <figcaption>
-                <strong>Figure 1.</strong> Logbook entries per year by nationality, 1750 to 1850.
-                Shaded bands mark major wars (Seven Years' War, American Revolution, French Revolutionary
-                and Napoleonic Wars). The Spanish peak in 1778, the Dutch blackout from 1797 to 1801,
-                and the French collapse after 1789 are all legible in the data. The British line holds
-                steady across the entire period, reflecting the structural advantage of the East India
-                Company and the Royal Navy's global reach.
+                <strong>Figure 1 (static).</strong> Logbook entries per year by nationality, 1750–1850,
+                drawn as a stacked area so that the band heights sum to total annual fleet activity.
+                Shaded grey vertical bands mark major wars. Spain's 1778 peak, the Dutch blackout during
+                the VOC dissolution (1797–1801), and France's collapse after 1789 are visible as
+                discontinuities in their respective bands. The British layer dominates the upper portion
+                of the stack throughout the century, reflecting the structural advantage of the East
+                India Company and the Royal Navy's global reach.
             </figcaption>
         </figure>
     </div>
@@ -688,11 +689,14 @@
 
     <div class="figure">
         <figure>
-            <iframe src="visualizations/viz1_rise_fall.html" height="520" loading="lazy" title="Interactive stacked area chart"></iframe>
+            <iframe src="visualizations/viz1_rise_fall.html" height="520" loading="lazy" title="Interactive area chart"></iframe>
             <figcaption>
-                <strong>Figure 2 (interactive).</strong> Hover for exact counts per nation per year.
-                Click legend entries to isolate individual nations. Try toggling off Britain to see
-                how the other three nations compare without the dominant British signal.
+                <strong>Figure 2 (interactive).</strong> The same data redrawn as <em>non-stacked,
+                overlapping</em> areas — each nation's curve is drawn from zero with a translucent fill,
+                so smaller series like Spain and France stay visible inside the larger British envelope
+                instead of being compressed at the top of a stack. Hover for exact counts per year;
+                click legend entries to isolate individual nations. Try hiding Britain to compare the
+                other three trajectories directly.
             </figcaption>
         </figure>
     </div>
@@ -772,11 +776,11 @@
         <figure>
             <iframe src="visualizations/viz2_routes.html" height="560" loading="lazy" title="Interactive ship route map"></iframe>
             <figcaption>
-                <strong>Figure 3 (interactive).</strong> Use the layer control (top right) to toggle
-                nations on and off. Zoom into specific regions to examine individual route segments.
-                Each line is a sampled voyage segment, coloured by nationality.
-                Try viewing Spain alone to see the treasure fleet corridors, or the Netherlands alone
-                to see the VOC highway in isolation.
+                <strong>Figure 3 (interactive).</strong> Each line is a sampled voyage segment,
+                coloured by the ship's nationality. Use the layer control (top-right) to toggle
+                nations on and off, and zoom in to inspect individual segments. Try viewing Spain
+                alone to isolate the Caribbean treasure-fleet corridors, or the Netherlands alone
+                to see the single VOC highway between Texel and Batavia.
             </figcaption>
         </figure>
     </div>
@@ -825,9 +829,9 @@
 
     <p>
         What makes the encounter data genuinely interesting to explore is the question of correlation
-        with diplomatic status. The encounter hotspots visible on the heatmap, the English Channel,
-        the Caribbean, the Cape of Good Hope, and the waters around Java, are precisely the locations
-        where major naval battles took place during this century. This raises a compelling question: do
+        with diplomatic status. The dense dot clusters in the encounter map below — the English
+        Channel, the Caribbean, the Cape of Good Hope, and the waters around Java — are precisely
+        the locations where major naval battles took place during this century. This raises a compelling question: do
         the encounter counts change during wartime versus peacetime? If they do, it could indicate that
         wartime patrols increased the likelihood of contact. If they do not, it would suggest that these
         were structurally inevitable collision points, places where imperial trade routes crossed regardless
@@ -868,13 +872,15 @@
 
     <div class="figure">
         <figure>
-            <iframe src="visualizations/viz3_encounters.html" height="560" loading="lazy" title="Geographic encounter heatmap"></iframe>
+            <iframe src="visualizations/viz3_encounters.html" height="560" loading="lazy" title="Geographic encounter map"></iframe>
             <figcaption>
-                <strong>Figure 4 (interactive).</strong> Toggle between "All Encounters" (full density),
-                "Cross-Nation Encounters" (different empires meeting), and "Top Encounter Hotspots"
-                (the 30 busiest meeting points). The English Channel dominates in raw volume, but
-                switch to cross-nation encounters to see where rival empires actually intersected:
-                the Caribbean and the Cape of Good Hope stand out.
+                <strong>Figure 4 (interactive).</strong> Each dot is a single logged encounter,
+                coloured by the <em>logging</em> ship's nation. The layer control (top-right) filters by <em>involvement</em>: an encounter shows up under
+                a nation whenever that nation appears on either side, so a Dutch-logged sighting of a
+                British ship appears in both the Dutch and the British layers. Hover any dot for the
+                nation pair and year. Where dots cluster densely — the English Channel, the Caribbean,
+                the approaches to the Cape of Good Hope, the waters around Java — those are the
+                corridors where empire routes actually crossed paths.
             </figcaption>
         </figure>
     </div>
